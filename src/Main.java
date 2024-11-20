@@ -127,7 +127,7 @@ public class Main {
                        myArrList.add(rec);
                    }
                    reader.close();
-                   display();
+                   isDirty = false;
                } else
                {
                    System.out.println("No file selected!");
