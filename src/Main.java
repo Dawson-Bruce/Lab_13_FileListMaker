@@ -135,6 +135,7 @@ public class Main {
                    }
                    reader.close();
                    isDirty = false;
+                   System.out.println("File loaded!");
                } else
                {
                    System.out.println("No file selected!");
