@@ -28,10 +28,12 @@ public class Main {
             try {
                 if (command.equalsIgnoreCase("q")) {
                     if (isDirty) {
-                        done = SafeInput.getYNConfirm(in, "The current file isn't saved, are you sure you want to quit?");
-                    } else {
-                        done = SafeInput.getYNConfirm(in, "Are you sure you want to quit?");
+                        if (SafeInput.getYNConfirm(in, "The current file isn't saved, do you want to save it?")) {
+                            saveList();
+                        }
                     }
+
+                    done = SafeInput.getYNConfirm(in, "Are you sure you want to quit?");
                 } else if (command.equalsIgnoreCase("a")) {
                     addItem();
                 } else if (command.equalsIgnoreCase("d")) {
@@ -112,15 +114,20 @@ public class Main {
     }
 
     private static void openList() throws FileNotFoundException, IOException {
-           if (!isDirty || SafeInput.getYNConfirm(in, "The current list isn't saved, are you sure you want to continue?")) {
+           if (isDirty) {
+               if (SafeInput.getYNConfirm(in, "The current list isn't saved, do you want to save it?")) {
+                   saveList();
+               }
+           }
+
                chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
-                clearList();
 
                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                    selectedFile = chooser.getSelectedFile();
                    Path file = selectedFile.toPath();
                    InputStream in = new BufferedInputStream(Files.newInputStream(file, CREATE));
                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                   clearList();
 
                    while (reader.ready()) {
                        rec = reader.readLine();
@@ -132,7 +139,6 @@ public class Main {
                {
                    System.out.println("No file selected!");
                }
-           }
     }
 
     private static void saveList() throws FileNotFoundException, IOException {
